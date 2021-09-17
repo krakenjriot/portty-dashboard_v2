@@ -1,0 +1,50 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+exe/conf/1vajBAFJhSlHOqVE.tmp
+*.dht
+*.tmp
+*.dht
+*.tmp
+*.tmp
+*.tmp
+exe/conf/1vajBAFJhSlHOqVE.tmp
+*.dht
+*.dht
+*.tmp
+*.output
+exe/conf/1vajBAFJhSlHOqVE.dht
+*.output
+*.tmp
+*.output
+*.output
+.tmp.driveupload/4765
