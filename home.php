@@ -207,7 +207,27 @@
              }
          }
          
-		 
+
+
+         $sql = "SELECT dashboard_ip FROM tbl_settings ";
+         $result = mysqli_query($conn, $sql);
+         $board_name_list_option = "";
+         if (mysqli_num_rows($result) > 0)
+         {
+             // output data of each row
+             while ($row = mysqli_fetch_assoc($result))
+             {
+                 $dashboard_ip = $row['dashboard_ip'];
+             }
+         } 
+
+
+
+
+
+
+
+
 		 
          //create board list
          //create board list
@@ -1496,9 +1516,10 @@
                                     <th>name</th>
                                     <th>desc</th>
                                     <th>type</th>
+                                    <th>script</th>
                                     <th>location</th>
                                     <th>timezone</th>
-                                    <th>exe_dir</th>
+                                    
                                     <th>passcode</th>
                                     <th>refresh_sec</th>
                                  </tr>
@@ -1511,9 +1532,10 @@
                                     <th>name</th>
                                     <th>desc</th>
                                     <th>type</th>
+                                    <th>script</th>
                                     <th>location</th>
                                     <th>timezone</th>
-                                    <th>exe_dir</th>
+                                    
                                     <th>passcode</th>
                                     <th>refresh_sec</th>
                                  </tr>
@@ -1531,10 +1553,14 @@
                                             if ($row["active"])
                                             {
                                                 $active = "<i class='far fa-check-circle fa-2x text-success'></i>";
+												$butt_color = 'btn-primary';
+												$mon = "<i class='fas fa-terminal fa-2x'></i>";
                                             }
                                             else
                                             {
                                                 $active = "<i class='far fa-times-circle fa-2x text-danger'></i>";
+												$butt_color = 'btn-danger';
+												$mon = "<i class='fas fa-terminal fa-2x'></i>";
                                             }
                                
                                             echo "<tr>" .        
@@ -1558,8 +1584,10 @@
                                     		"<td>" . $row["monitor_name"] . "</td>" . 
                                     		"<td>" . $row["monitor_desc"] . "</td>" . 
                                     		"<td>" . $row["monitor_type"] . "</td>" . 
-                                    		"<td>" . $row["monitor_location"] . "</td>" . "<td>" . $row["monitor_timezone"] . "</td>" .                                     		 
-                                    		"<td>" . $row["exe_dir"] . "</td>" . 
+											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile_monitor' class='btn " . $butt_color . " btn-circle btn-sm' data-monitor_name='" . $row["monitor_name"] . "' data-passcode='" . $row["passcode"] . "' data-dashboard_ip='" . $dashboard_ip . "' data-refresh_sec='" . $row["refresh_sec"] . "' >$mon</i></a></td>" .
+                                    		"<td>" . $row["monitor_location"] . "</td>" . 
+											"<td>" . $row["monitor_timezone"] . "</td>" .                                     		 
+                                    		//"<td>" . $row["exe_dir"] . "</td>" . 
                                     		"<td>" . $row["passcode"] . "</td>" . 
                                     		"<td>" . $row["refresh_sec"] . "</td>" . 
                                             "</tr>";
@@ -1722,7 +1750,7 @@
                                     									data-com_port='" . $row["com_port"] . "'						
                                     									data-refresh_sec='" . $row["refresh_sec"] . "'						
                                     									><i class='far fa-edit fa-2x'></i></a></td>" .                                     									
-											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile' class='btn " . $butt_color . " btn-circle btn-sm' data-board_name='" . $row["board_name"] . "'>$mon</i></a></td>" .
+											"<td><a href='#' data-toggle='modal' data-target='#downloadBatchfile' class='btn " . $butt_color . " btn-circle btn-sm' data-board_name='" . $row["board_name"] . "' data-com_port='" . $row["com_port"] . "' data-refresh_sec='" . $row["refresh_sec"] . "' >$mon</i></a></td>" .
                                             //"<td><a href='batchfile/" . $row["board_name"] . ".porttymon.bat'  class='btn " . $butt_color . " btn-circle btn-sm' download>$mon</a></td>" .
                                             "<td>" . $row["board_name"] . "</td>" . 
 											"<td>" . $row["board_desc"] . "</td>" . 
@@ -2061,10 +2089,10 @@
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
-      <div class="modal fade" id="downloadBatchfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="downloadBatchfile_monitor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
             <div class="modal-content">
-               <form class="user" action="?p=4" method="post">
+               <form class="user" action="?p=4" method="post" >
                   <div class="modal-header">
                      <h5 class="modal-title" id="exampleModalLabel">Download Script</h5>
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -2076,62 +2104,48 @@
                   </div>
                   <div class="modal-footer"> 
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Abort</button>             		  
-                     <input id="download" class="btn btn-primary " type="button" value="Download" data-dismiss="modal" />
+                     <input id="download_porttyweb_id" class="btn btn-primary " type="button" value="Download" data-dismiss="modal" />
                   </div>
                </form>
             </div>
          </div>
       </div>
       <script type="text/javascript">
-         $('#downloadBatchfile').on('show.bs.modal', function (event) {
+function download_porttyweb_script(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+	  
+	  
+         $('#downloadBatchfile_monitor').on('show.bs.modal', function (event) {
          
            var link = $(event.relatedTarget) // Button that triggered the modal
-           var board_name = link.data('board_name') // Extract info from data-* attributes
+           var monitor_name = link.data('monitor_name') // Extract info from data-* attributes
+           var passcode = link.data('passcode') // Extract info from data-* attributes
+           var dashboard_ip = link.data('dashboard_ip') // Extract info from data-* attributes
+           var refresh_sec = link.data('refresh_sec') // Extract info from data-* attributes
            var modal = $(this)        
-           modal.find('.modal-body h5').text('Download porttymon script for board ' + board_name)	
+           modal.find('.modal-body h5').text('Download porttyweb script for monitor ' + monitor_name)	        
+	
+			document.getElementById("download_porttyweb_id").onclick = function () {
+				var fileName = monitor_name + '.porttyweb.bat';
+				//var file_path = "C:\\xampp\\htdocs\\portty-dashboard\\batchfile\\" + fileName;	
+				download_porttyweb_script(fileName,`
+				c:
+				cd C:\\xampp\\htdocs\\portty-dashboard\\exe
+				porttyweb.exe ` + refresh_sec + ` ` + dashboard_ip + ` ` + passcode + ` ` + monitor_name + ` 0 uno
+				pause`);					
          
-         
-         document.getElementById("download").onclick = function () { 
-         
-             
-         var fileName = board_name + '.porttymon.bat';
-               var url = "batchfile/" + fileName;	
-         
-         
-               var req = new XMLHttpRequest();
-               req.open("GET", url, true);
-               req.responseType = "blob";
-               req.onload = function () {
-                
-                   var blob = new Blob([req.response], { type: "application/octetstream" });
-         
-               
-                   var isIE = false || !!document.documentMode;
-                   if (isIE) {
-                       window.navigator.msSaveBlob(blob, fileName);
-                   } else {
-                       var url = window.URL || window.webkitURL;
-                       link = url.createObjectURL(blob);
-                       var a = document.createElement("a");
-                       a.setAttribute("download", fileName);
-                       a.setAttribute("href", link);
-                       document.body.appendChild(a);
-                       a.click();
-                       document.body.removeChild(a);
-                   }
-               };
-               req.send();		
-         
-         
-         };
-         
-         
-         
-         
-         
-         
-         
-         
+			};
          }); 	
          
          
@@ -2143,6 +2157,80 @@
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->
+      <div class="modal fade" id="downloadBatchfile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <form class="user" action="?p=4" method="post" >
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLabel">Download Script</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                     </button>
+                  </div>
+                  <div class="modal-body">
+                     <h5 class="command_line" ></h5>
+                  </div>
+                  <div class="modal-footer"> 
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Abort</button>             		  
+                     <input id="download_porttymon_id" class="btn btn-primary " type="button" value="Download" data-dismiss="modal" />
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <script type="text/javascript">
+function download_porttymon_script(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+	  
+	  
+         $('#downloadBatchfile').on('show.bs.modal', function (event) {
+         
+           var link = $(event.relatedTarget) // Button that triggered the modal
+           var board_name = link.data('board_name') // Extract info from data-* attributes
+           var com_port = link.data('com_port') // Extract info from data-* attributes
+           var refresh_sec = link.data('refresh_sec') // Extract info from data-* attributes
+           var modal = $(this)        
+           modal.find('.modal-body h5').text('Download porttymon script for board ' + board_name)	        
+	
+			document.getElementById("download_porttymon_id").onclick = function () {
+				var fileName = board_name + '.porttymon.bat';
+				//var file_path = "C:\\xampp\\htdocs\\portty-dashboard\\batchfile\\" + fileName;	
+				download_porttymon_script(fileName,`
+				c:
+				cd C:\\xampp\\htdocs\\portty-dashboard\\exe
+				porttymon.exe ` + board_name + ` ` + com_port + ` ` + refresh_sec + `
+				pause`);					
+         
+			};
+         }); 	
+         
+         
+         
+         
+         
+      </script>
+      <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->
+      <!-- DOWNLOAD BATCHFILE -->	  
+	  
+	  
+	  
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
       <!-- DOWNLOAD BATCHFILE -->
