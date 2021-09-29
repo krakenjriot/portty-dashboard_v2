@@ -17,6 +17,8 @@
 		
 		$email = $_GET['email'];
 		
+	} else {
+		$email = "";
 	}	
 	
 	if(isset($_POST['submit'])) {

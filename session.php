@@ -9,7 +9,8 @@ if( !isset($_SESSION['id']) ){
 			
 			$fullname = $_SESSION['fullname'];	
 			$fname = $_SESSION['fname'];	
-			$email_post = $_SESSION['email'];		
+			$email = $_SESSION['email'];		
+			$mobile_number = $_SESSION['mobile_number'];		
 	
 } 
 

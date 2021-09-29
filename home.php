@@ -2725,11 +2725,11 @@ function download_porttymon_script(filename, text) {
                      </div>
                      <div class="form-group">
                         <label for="user_mobile" class="col-form-label">user_mobile:</label>
-                        <input class="form-control" id="user_mobile" name="user_mobile" value="<?php echo $user_mobile; ?>" ></input>
+                        <input class="form-control" id="user_mobile" name="user_mobile" value="<?php echo $mobile_number; ?>" ></input>
                      </div>
                      <div class="form-group">
                         <label for="user_email" class="col-form-label">user_email:</label>
-                        <input class="form-control" id="user_email" name="user_email" value="<?php echo $user_email; ?>" ></input>
+                        <input class="form-control" id="user_email" name="user_email" value="<?php echo $email; ?>" ></input>
                      </div>
                   </div>
                   </br>

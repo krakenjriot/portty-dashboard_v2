@@ -61,6 +61,7 @@
                  $pass = $row['pass'];
                  $fname = $row['fname'];
                  $lname = $row['lname'];
+                 $mobile_number = $row['mobile_number'];
              }
         } else if (mysqli_num_rows($result) == 0) {
 			header("location: ?p=2&email=$email_post&msg=please set new account");
@@ -88,6 +89,7 @@
 			$_SESSION['fullname'] = $fullname;	
 			$_SESSION['fname'] = $fname;	
 			$_SESSION['email'] = $email_post;	
+			$_SESSION['mobile_number'] = $mobile_number;	
 			
 			
 			
