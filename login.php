@@ -1,6 +1,11 @@
 <?php
 
-	if (file_exists('config')) {
+
+   //include ("session.php");
+   include ("dbconnect.php");
+   include ("functions.php");
+
+	/* if (file_exists('config')) {
 		//do nothing
 	} else {
 		//create new file
@@ -23,7 +28,11 @@
 	$pass = $config['pass'];
 	$fname = $config['fname'];
 	$lname = $config['lname'];
-	$fullname = ucfirst($fname)." ".ucfirst($lname);
+	$fullname = ucfirst($fname)." ".ucfirst($lname); */
+	
+
+
+	
 	
 	//init
 	if(isset($_GET['msg'])){
@@ -33,15 +42,32 @@
 	}
 	
 	
-	if($pass == "" ) {
-		header("location: ?p=2&msg=please set new account");
-		exit();	
-	} 	
 	
 	if(isset($_POST['submit'])) {
 		
 		//$email_post = $_POST['email'];
+		$email_post = $_POST['email'];
 		$pass_post = $_POST['pass'];
+		
+         $sql = "SELECT * FROM tbl_users WHERE email = '$email_post' ";
+         $result = mysqli_query($conn, $sql);         
+
+         if (mysqli_num_rows($result) > 0)
+         {
+             // output data of each row
+             while ($row = mysqli_fetch_assoc($result))
+             {
+                 //$email = $row['email'];
+                 $pass = $row['pass'];
+                 $fname = $row['fname'];
+                 $lname = $row['lname'];
+             }
+        } else if (mysqli_num_rows($result) == 0) {
+			header("location: ?p=2&email=$email_post&msg=please set new account");
+			exit();	
+		} 
+		
+		 $fullname = ucfirst($fname)." ".ucfirst($lname);		
 		
 		if( $pass_post == ""){
 			header("location: ?p=1&msg=login-failed-empty-data");
@@ -56,12 +82,17 @@
 			exit();	
 		} 		
 		else if(md5($pass_post) == $pass) {
+			
 			session_start(); //start the PHP_session function 			
 			$_SESSION['id'] = md5(time());	
-
-
+			$_SESSION['fullname'] = $fullname;	
+			$_SESSION['fname'] = $fname;	
+			$_SESSION['email'] = $email_post;	
+			
+			
+			
 		
-			$s_file = "start.ts";
+/* 			$s_file = "start.ts";
 			if (!file_exists($s_file))
 			{				
 				file_put_contents($s_file, strtotime('now'));
@@ -71,7 +102,7 @@
 			if (!file_exists($c_file))
 			{				
 				file_put_contents($c_file, strtotime('now'));
-			}
+			} */
 
 			
 			header("location: ?p=4&msg=login-success&");
@@ -95,7 +126,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -125,7 +156,7 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back <?php echo $fullname; ?> </h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back! <?php //echo $fullname; ?> </h1>
                                     </div>
 									
 								
@@ -138,7 +169,7 @@
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Enter Email Address..." name="email" value="<?php echo $email; ?>" disabled >
+                                                placeholder="Enter Email Address..." name="email" >
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"

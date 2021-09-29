@@ -8,7 +8,7 @@
 	switch ($p) {
     case '0': include('404.php'); break;    	
     case '1': include('login.php'); break;
-    case '2': include('register.php'); break;
+    case '2': include('register2.php'); break;
     case '3': include('forgot-password.php'); break;
     case '4': include('home.php'); break;
     case '5': include('setpass.php'); break;
