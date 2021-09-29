@@ -1458,7 +1458,7 @@
                      </div>
                   </div>
                </div>
-               <h2 id="mark-monitor"></h2>
+              
                <div class="card shadow mb-4">
                   <div class="card-header py-3">
                      <h4 class="m-0 font-weight-bold text-primary">DHT Health Check [ <?php echo $board_name_monitored; ?> ]</h4>

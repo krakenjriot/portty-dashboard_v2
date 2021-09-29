@@ -1,5 +1,7 @@
 <?php
-include ("session.php");
+	include ("session.php");
+	include ("dbconnect.php");
+	include ("functions.php");	
 
 	if(isset($_GET['msg'])){
 		$msg = $_GET['msg'];
@@ -15,17 +17,35 @@ include ("session.php");
 		
 		
 		if($pass0 == "" || $pass1 == ""){
-			header("location: ?p=8&msg=set-pass-failed-empty-data");
+			//header("location: ?p=8&msg=set-pass-failed-empty-data");
 			exit();	
 		} else if($pass0 != $pass1) {
-			header("location: ?p=4&msg=new-server-added-success");
+			//header("location: ?p=4&msg=new-server-added-success");
 			exit();	
 		} else if($pass0 == $pass1 && ($pass0 != "" || $pass1 != "")) {
-			$config = include 'config';				
-			$config['pass']= md5($pass1);				
-			file_put_contents('config', '<?php return ' . var_export($config, true) . ';');				
-			header("location: ?p=4&msg=password-update-successful");
-			exit();
+			
+			
+			$email;
+			
+			
+			//$config = include 'config';				
+			//$config['pass']= md5($pass1);
+			$pass_hashed = md5($pass0);			
+			//file_put_contents('config', '<?php return ' . var_export($config, true) . ';');				
+
+				 $sql = "UPDATE tbl_users  SET " .                  
+						" pass = '$pass_hashed' " .
+						"WHERE email = '$email' ";                
+						
+					  
+					  if ($conn->query($sql) === true) {
+						header("location: ?p=4&msg=password-update-successful");
+						exit();					  
+					  } else {
+						header("location: ?p=4&msg=password-update-error");
+						exit();				  
+					  }	
+
 		}
 	}
 ?>
